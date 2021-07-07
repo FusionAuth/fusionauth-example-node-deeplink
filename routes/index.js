@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {FusionAuthClient} = require('@fusionauth/typescript-client');
-const clientId = '353976a3-fd92-4f65-9e83-e12b80f876b2';
-const clientSecret = '1OKJDwguejZ35VrzW-mHVs3H1MU1zxCIHe0i_WFHP-I';
+const clientId = '8ce01d5d-99b8-4853-b7ff-1d174544f01c';
+const clientSecret = 'z0eSN_IGYuA-0mP8FnmF4AwPK3iJk4n82L4LRN25dtA';
 const client = new FusionAuthClient('noapikeyneeded', 'http://localhost:9011');
 const pkceChallenge = require('pkce-challenge');;
 
@@ -39,9 +39,9 @@ router.get('/product', function (req, res, next) {
     // Store the PKCE verifier in session
     req.session.verifier = pkce_pair['code_verifier'];
     const challenge = pkce_pair['code_challenge'];
-    res.render(name, {
+    res.render('product', {
         user: req.session.user,
-        title: name,
+        title: titleCase(name),
         clientId: clientId,
         challenge: challenge,
         stateValue: stateValue
@@ -102,5 +102,9 @@ router.get('/oauth-redirect', function (req, res, next) {
     //       res.redirect(302, '/');
     //     }).catch((err) => {console.log("in error"); console.error(JSON.stringify(err));});
 });
+
+function titleCase(str) {
+  return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+}
 
 module.exports = router;
