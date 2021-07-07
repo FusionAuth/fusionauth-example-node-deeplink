@@ -3,7 +3,7 @@ extends layout
 block content
     h1= title
     if user
-        a(href='https://demo.fusionauth.io/oauth2/logout?client_id=353976a3-fd92-4f65-9e83-e12b80f876b2') Logout
+        a(href='https://demo.fusionauth.io/oauth2/logout?client_id='+clientId) Logout
         br
         p Hello #{user.firstName}. Welcome to #{title}
     else
