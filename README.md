@@ -16,4 +16,4 @@ This assumes you already have a running FusionAuth instance, user and applicatio
 
 Go to http://localhost:3000/ and click through to a product page. Then click login, log in and then verify that once authenticated you are returned to the same product page.
 
-
+Learn more at https://fusionauth.io
