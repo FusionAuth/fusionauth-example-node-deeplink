@@ -67,7 +67,6 @@ router.get('/oauth-redirect', function (req, res, next) {
         res.redirect(302, '/');
         return;
     }
-
     // This code stores the user in a server-side session
     client.exchangeOAuthCodeForAccessTokenUsingPKCE(req.query.code,
         clientId,
@@ -87,9 +86,7 @@ router.get('/oauth-redirect', function (req, res, next) {
             req.session.user = response.response.user;
         })
         .then((response) => {
-            const encodedUrl = urlToEndUpAt;
-            const decodedUrl = decodeURIComponent(encodedUrl);
-                res.redirect(302, decodedUrl);
+            res.redirect(302, urlToEndUpAt);
         }).catch((err) => {
         console.log("in error");
         console.error(JSON.stringify(err));
