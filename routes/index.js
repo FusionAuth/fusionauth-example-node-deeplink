@@ -4,14 +4,15 @@ const {FusionAuthClient} = require('@fusionauth/typescript-client');
 const clientId = '8ce01d5d-99b8-4853-b7ff-1d174544f01c';
 const clientSecret = 'z0eSN_IGYuA-0mP8FnmF4AwPK3iJk4n82L4LRN25dtA';
 const client = new FusionAuthClient('noapikeyneeded', 'http://localhost:9011');
-const pkceChallenge = require('pkce-challenge');;
+const pkceChallenge = require('pkce-challenge');
 
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
     const stateValue = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-    req.session.stateValue = stateValue + ':' + encodeURI(req.url);
+    req.session.stateValue = stateValue;
+    const urlStateValue = stateValue + '-' + encodeURIComponent(req.url);
 
     //generate the pkce challenge/verifier dict
     const pkce_pair = pkceChallenge();
@@ -23,7 +24,7 @@ router.get('/', function (req, res, next) {
         title: 'FusionAuth Deeplink Example',
         clientId: clientId,
         challenge: challenge,
-        stateValue: stateValue
+        stateValue: urlStateValue
     });
 });
 
@@ -32,7 +33,8 @@ router.get('/product', function (req, res, next) {
     const stateValue = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const name = req.query.name;
 
-    req.session.stateValue = stateValue + ':' + encodeURI(req.url);
+    req.session.stateValue = stateValue;
+    const urlStateValue = stateValue + '-' + encodeURIComponent(req.url);
 
     //generate the pkce challenge/verifier dict
     const pkce_pair = pkceChallenge();
@@ -44,7 +46,7 @@ router.get('/product', function (req, res, next) {
         title: titleCase(name),
         clientId: clientId,
         challenge: challenge,
-        stateValue: stateValue
+        stateValue: urlStateValue
     });
 });
 
@@ -57,7 +59,9 @@ router.get('/logout', function (req, res, next) {
 /* OAuth return from FusionAuth */
 router.get('/oauth-redirect', function (req, res, next) {
     const stateFromServer = req.query.state;
-    if (stateFromServer !== req.session.stateValue.split(':')[0]) {
+    const stateValue = stateFromServer.split('-')[0];
+    const urlToEndUpAt = stateFromServer.split('-')[1];
+    if (stateValue !== req.session.stateValue) {
         console.log("State doesn't match. uh-oh.");
         console.log("Saw: " + stateFromServer + ", but expected: " + req.session.stateValue);
         res.redirect(302, '/');
@@ -83,8 +87,8 @@ router.get('/oauth-redirect', function (req, res, next) {
             req.session.user = response.response.user;
         })
         .then((response) => {
-            const encodedUrl = req.session.stateValue.split(':')[1];
-            const decodedUrl = decodeURI(encodedUrl);
+            const encodedUrl = urlToEndUpAt;
+            const decodedUrl = decodeURIComponent(encodedUrl);
                 res.redirect(302, decodedUrl);
         }).catch((err) => {
         console.log("in error");
