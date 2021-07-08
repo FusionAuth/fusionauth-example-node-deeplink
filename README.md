@@ -9,7 +9,7 @@ This application will use the same OAuth Authorization Code workflow as the Node
 This assumes you already have a running FusionAuth instance, user and application running locally at `http://localhost:9011`. If you don't, please see the [5-Minute Setup Guide](https://fusionauth.io/docs/v1/tech/5-minute-setup-guide) to do so.
 
 * update your FusionAuth application to allow a redirect of `http://localhost:3000/oauth-redirect`
-* make sure your user has a first name.
+* make sure your user has a first name and is registered for the FusionAuth application.
 * `npm install`
 * update `routes/index.js` with the client id and client secret of your FusionAuth application.
 * `npm start`
