@@ -58,9 +58,11 @@ router.get('/logout', function (req, res, next) {
 
 /* OAuth return from FusionAuth */
 router.get('/oauth-redirect', function (req, res, next) {
+//tag::extractURLFromState[]
     const stateFromServer = req.query.state;
     const stateValue = stateFromServer.split('-')[0];
     const urlToEndUpAt = stateFromServer.split('-')[1];
+//end::extractURLFromState[]
     if (stateValue !== req.session.stateValue) {
         console.log("State doesn't match. uh-oh.");
         console.log("Saw: " + stateFromServer + ", but expected: " + req.session.stateValue);
