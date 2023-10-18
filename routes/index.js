@@ -62,7 +62,6 @@ router.get('/oauth-redirect', function (req, res, next) {
     const stateFromServer = req.query.state;
     const stateValue = stateFromServer.split('-')[0];
     const urlToEndUpAt = stateFromServer.split('-')[1];
-//end::extractURLFromState[]
     if (stateValue !== req.session.stateValue) {
         console.log("State doesn't match. uh-oh.");
         console.log("Saw: " + stateFromServer + ", but expected: " + req.session.stateValue);
@@ -93,6 +92,7 @@ router.get('/oauth-redirect', function (req, res, next) {
         console.log("in error");
         console.error(JSON.stringify(err));
     });
+//end::extractURLFromState[]
 
     // This code pushes the access and refresh tokens back to the browser as secure, HTTP-only cookies
     // client.exchangeOAuthCodeForAccessToken(req.query.code,
